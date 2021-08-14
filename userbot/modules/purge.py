@@ -181,12 +181,6 @@ async def selfdestruct(destroy):
         await tgbott.send_message(BOTLOG_CHATID, "sd query done successfully")
 
 
-
-@register(outgoing=True, pattern="^s/")
-async def deletesed(delsed):
-    await delsed.delete()
-
-
 CMD_HELP.update(
     {
         "purge": ".purge\
@@ -234,13 +228,5 @@ CMD_HELP.update(
         "sd": ".sd <x> <message>\
 \nUsage: Creates a message that selfdestructs in x seconds.\
 \nKeep the seconds under 100 since it puts your bot to sleep."
-    }
-)
-
-CMD_HELP.update(
-    {
-        "s": "s/*  sed deleter\
-\nUsage: deletes the sed message\
-\nwhen u use the s/*/* the bots auto deletes it"
     }
 )
