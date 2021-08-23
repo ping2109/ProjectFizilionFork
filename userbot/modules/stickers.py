@@ -281,7 +281,7 @@ async def resize_photo(photo):
     return image
 
 
-@register(outgoing=True, pattern=r"^\{trg}k$".format(trg=trgg))
+@register(outgoing=True, pattern="^\{trg}k($| .*)".format(trg=trgg))
 async def k(args):
     """ For .kang command, kangs stickers or creates new ones silently. """
     user = await bot.get_me()
@@ -322,9 +322,10 @@ async def k(args):
         else:
             return await args.edit("**Unsupported file!**")
     else:
-        return await args.edit("**I can't kang that...**")
+        await args.edit("**I can't kang that...**")
         time.sleep(1)
         await args.delete()
+        return
 
     if photo:
         splat = args.text.split()
@@ -422,13 +423,14 @@ async def k(args):
                         await conv.get_response()
                         # Ensure user doesn't get spamming notifications
                         await bot.send_read_acknowledge(conv.chat_id)
-                        return await args.edit(
+                        await args.edit(
                             "**Sticker added in a different pack!**"
                             "\nThis pack is newly created."
                             f"\nYour pack can be found [here](t.me/addstickers/{packname})"
                         )
                         time.sleep(1)
                         await args.delete()
+                        return
                 if is_anim:
                     await conv.send_file("AnimatedSticker.tgs")
                     remove("AnimatedSticker.tgs")
@@ -437,11 +439,12 @@ async def k(args):
                     await conv.send_file(file, force_document=True)
                 rsp = await conv.get_response()
                 if "Sorry, the file type is invalid." in rsp.text:
-                    return await args.edit(
+                    await args.edit(
                         "**Failed to add sticker, use** @Stickers **bot to add the sticker manually.**"
                     )
                     time.sleep(1)
                     await args.delete()
+                    return
                 await conv.send_message(emoji)
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
@@ -450,7 +453,6 @@ async def k(args):
                 await conv.get_response()
                 # Ensure user doesn't get spamming notifications
                 await bot.send_read_acknowledge(conv.chat_id)
-
 
 async def resize_photo(photo):
     """ Resize the given photo to 512x512 """
@@ -575,6 +577,8 @@ CMD_HELP.update(
     {
         "stickers": ">`.kang <emoji>[optional] <pack number>[optional]`"
         "\nUsage: Adds sticker or image to your userbot pack."
+        "\n>`.k <emoji>[optional] <pack number>[optional]`"
+        "\nUsage: Adds sticker or image to your userbot pack silently."
         "\n\n>`.stkrinfo`"
         "\nUsage: Gets info about the sticker pack."
         "\n\n>`.getsticker`"

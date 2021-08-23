@@ -266,21 +266,22 @@ async def amireallyalivee(alive):
         f"**Hello  {DEFAULTUSER} **\n"
         f"`=================================== `\n"
         f"**[OS Info]:**\n"
-        f"•`Platform Type    : {os.name}`\n"
-        f"•`Distro           : {distro.name(pretty=False)} {distro.version(pretty=False, best=False)}`\n"
+        f"• `Platform Type   :  {os.name}`\n"
+        f"• `Distro          :  {distro.name(pretty=False)}`\n"
+        f"• `Distro ver      :  {distro.major_version(best=True)}`\n"
         f"`===================================`\n"
         f"**[PYPI Module Versions]:**\n"
-        f"•`Python          : v{python_version()} `\n"   
-        f"•`Telethon        : v{version.__version__} `\n"
-        f"•`PIP             : v{pip.__version__} `\n"
+        f"• `Python          :  {python_version()} `\n"   
+        f"• `Telethon        :  {version.__version__} `\n"
+        f"• `PIP             :  {pip.__version__} `\n"
         f"`===================================`\n"
         f"**[MISC Info]:**\n"
-        f"•`User            : {DEFAULTUSER} `\n"
-        f"•`Branch          : pruh `\n"
-        f"•`Fork status     : Connected `\n"
-        f"•`Loaded modules  : {len(modules)} `\n"
-        f"•`Release         : {USERBOT_VERSION} `\n"
-        f"•`Bot Uptime      : {uptime} `\n"
+        f"• `User            :  {DEFAULTUSER} `\n"
+        f"• `Branch          :  {repo.active_branch.name} `\n"
+        f"• `Fork status     :  Connected `\n"
+        f"• `Loaded modules  :  {len(modules)} `\n"
+        f"• `Release         :  {USERBOT_VERSION} `\n"
+        f"• `Bot Uptime      :  {uptime} `\n"
         f"`===================================`\n"
     )
     msg = await alive.edit(output)
@@ -309,6 +310,20 @@ async def amireallyalivereset(ureset):
     DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
     await ureset.edit("`" "Successfully reset user for alive!" "`")
 
+
+@register(outgoing=True, pattern="^\{trg}changelog$".format(trg=trgg))
+async def chnglogg(event):
+    await event.edit(
+        "In the latest update, these are the changes:\
+        \n\nAdded back the old kang command.\
+        \nIt can be accessed by .oldkang.\
+        \nIt's basically the same command just using the old naming of the sticker packs.\
+        \nSo it will use username's kang pack vol x.\
+        \n\nfixed .k (silent kang), not it should take args\
+        \n\nFixed some random non working stuff like .pero and .bruh\
+        \n\nFixed formatting for updater.\
+        \n\n.on/.alive distro naming changed.\
+        \n\nThis changelog is valid for the last update to forkzilion (ProjectFizilion fork by AbOuLfOoOoOuF) only.")
 
 CMD_HELP.update(
     {
