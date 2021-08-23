@@ -234,21 +234,19 @@ async def amireallyalive(alive):
     uptime = await get_readable_time((time.time() - StartTime))
     output = (
         f"`===================================`\n"
-        f"**FORKZILION IS UP** [Dev Edition]\n"
+        f"**FORKZIDEV IS UP** [Staging]\n"
         f"`=================================== `\n"
         f"•`Platform Type   :  {os.name}`\n"
         f"•`Distro          :  {distro.name(pretty=False)}`\n"
-        f"•`Distro ver      :  {distro.version(pretty=False, best=False)}`\n"
+        f"•`Distro ver      :  {distro.major_version(best=True)}`\n"
         f"•`Python          :  {python_version()} `\n"   
         f"•`Telethon        :  {version.__version__} `\n"
         f"•`PIP             :  {pip.__version__} `\n"
-        f"`===================================`\n"
-        f"•`User            : {DEFAULTUSER} `\n"
-        f"•`Branch          : {repo.active_branch.name} `\n"
-        f"•`Loaded modules  : {len(modules)} `\n"
-        f"•`Release         : {USERBOT_VERSION} `\n"
-        f"•`Bot Uptime      : {uptime} `\n"
-        f"`===================================`\n"
+        f"•`User            :  {DEFAULTUSER} `\n"
+        f"•`Loaded modules  :  {len(modules)} `\n"
+        f"• `Running on     :  pruh --staging `\n"
+        f"•`Release         :  {USERBOT_VERSION} `\n"
+        f"•`Bot Uptime      :  {uptime} `\n"
 
     )
     msg = await alive.edit(output)
@@ -257,7 +255,39 @@ async def amireallyalive(alive):
     if TIMEOUT:
         await msg.delete()
      
+@register(outgoing=True, pattern=r"^\{trg}(alivee|onn)$".format(trg=trgg))
+async def amireallyalivee(alive):
+    """ For .alive command, check if the bot is running.  """
+    uptime = await get_readable_time((time.time() - StartTime))
+    output = (
+        f"`===================================`\n"
+        f"**FIZILION IS UP** [Premium Edition]\n"
+        f"`=================================== `\n"
+        f"**Hello  {DEFAULTUSER} **\n"
+        f"`=================================== `\n"
+        f"**[OS Info]:**\n"
+        f"•`Platform Type    : {os.name}`\n"
+        f"•`Distro           : {distro.name(pretty=False)} {distro.version(pretty=False, best=False)}`\n"
+        f"`===================================`\n"
+        f"**[PYPI Module Versions]:**\n"
+        f"•`Python          : v{python_version()} `\n"   
+        f"•`Telethon        : v{version.__version__} `\n"
+        f"•`PIP             : v{pip.__version__} `\n"
+        f"`===================================`\n"
+        f"**[MISC Info]:**\n"
+        f"•`User            : {DEFAULTUSER} `\n"
+        f"•`Branch          : pruh `\n"
+        f"•`Fork status     : Connected `\n"
+        f"•`Loaded modules  : {len(modules)} `\n"
+        f"•`Release         : {USERBOT_VERSION} `\n"
+        f"•`Bot Uptime      : {uptime} `\n"
+        f"`===================================`\n"
+    )
+    msg = await alive.edit(output)
+    await sleep(30)
         
+    if TIMEOUT:
+        await msg.delete()        
 
 @register(outgoing=True, pattern="^\{trg}aliveu".format(trg=trgg))
 async def amireallyaliveuser(username):

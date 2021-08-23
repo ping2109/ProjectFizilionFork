@@ -6,7 +6,8 @@
 """ Userbot initialization. """
 
 import os
-import platform
+import distro
+import pip
 import re
 import time
 from sys import version_info
@@ -100,11 +101,7 @@ GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN") or None
 # Custom (forked) repo URL and BRANCH for updater.
 UPSTREAM_REPO_URL = (os.environ.get("UPSTREAM_REPO_URL")
                      or "https://github.com/AbOuLfOoOoOuF/ProjectFizilionFork.git")
-UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH") or "dev"
-###
-FUPSTREAM_REPO_URL = (os.environ.get("FPSTREAM_REPO_URL")
-                     or "https://github.com/Elytra8/ProjectFizilion.git")
-FUPSTREAM_REPO_BRANCH = os.environ.get("FPSTREAM_REPO_BRANCH") or "dragon"
+UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH") or "alpha"
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get(
     "CONSOLE_LOGGER_VERBOSE") or "False")
@@ -151,7 +148,7 @@ COUNTRY = str(os.environ.get("COUNTRY") or "")
 TZ_NUMBER = os.environ.get("TZ_NUMBER") or 1
 
 # Version of One4uBot
-USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "production 3.0"
+USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "staging 3.2+"
 
 # User Terminal alias
 USER_TERM_ALIAS = os.environ.get("USER_TERM_ALIAS") or "dem0n"
@@ -218,6 +215,11 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN") or False
 #Mega
 MEGA_EMAIL = os.environ.get("MEGA_EMAIL") or None
 MEGA_PASSWORD = os.environ.get("MEGA_PASSWORD") or None
+
+# gban group
+GBANLOG_CHATID = int(os.environ.get("GBANLOG_CHATID") or 0)
+GBANLOG_CHATID_USER = int(os.environ.get("GBANLOG_CHATID_USER") or 0)
+GBAN_ENF_CHATID = int(os.environ.get("GBAN_ENF_CHATID") or 0)
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
@@ -313,15 +315,19 @@ modules = CMD_HELP
 uptime = time.strftime('%X')
 ##
 output = (
-    "` ==================================== `\n"
-    f"`Forkzilion dev is Up and Running.... `\n"
-    f"`==================================== `\n"
-    f"•`Telethon       : v{version.__version__} `\n"
-    f"•`Python         : v{python_version()} `\n"
-    f"•`User           : {DEFAULTUSER} `\n"
-    f"•`Running on     : {repo.active_branch.name} `\n"
-    f"•`Forkzilion     : {USERBOT_VERSION} `\n"
-    f"•`Bot started at : {uptime} `\n" 
+    "` ===================================== `\n"
+    f"`Forkzidev started --staging `\n"
+    f"`===================================== `\n"
+    f"• `Platform Type  :  {os.name}`\n"
+    f"• `Distro         :  {distro.name(pretty=False)}`\n"
+    f"• `Distro ver     :  {distro.major_version(best=True)}`\n"
+    f"• `Python         :  {python_version()} `\n"   
+    f"• `Telethon       :  {version.__version__} `\n"
+    f"• `PIP            :  {pip.__version__} `\n"
+    f"• `User           :  {DEFAULTUSER} `\n"
+    f"• `Running on     :  pruh --staging `\n"
+    f"• `Forkzilion     :  {USERBOT_VERSION} `\n"
+    f"• `Bot started at :  {uptime} `\n"
 )
 
 async def start():

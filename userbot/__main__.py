@@ -36,3 +36,4 @@ if HEROKU_APP_NAME is not None and HEROKU_API_KEY is not None:
     LOGS.info("HEROKU detected, sleeping for 5 minutes to prevent String Session Error")
     sleep(300)
     bot.run_until_disconnected()
+bot.run_until_disconnected()
