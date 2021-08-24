@@ -277,7 +277,7 @@ async def amireallyalivee(alive):
         f"`===================================`\n"
         f"**[MISC Info]:**\n"
         f"• `User            :  {DEFAULTUSER} `\n"
-        f"• `Branch          :  {repo.active_branch.name} `\n"
+        f"• `Branch          :  pruh --staging `\n"
         f"• `Fork status     :  Connected `\n"
         f"• `Loaded modules  :  {len(modules)} `\n"
         f"• `Release         :  {USERBOT_VERSION} `\n"

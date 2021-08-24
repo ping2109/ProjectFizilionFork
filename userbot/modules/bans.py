@@ -6,7 +6,7 @@
 import asyncio
 from sqlalchemy.exc import IntegrityError
 from asyncio import sleep
-from userbot import CMD_HELP, bot, trgg, GBANLOG_CHATID, GBAN_ENF_CHATID, tgbott, DEVS, BOTLOG_CHATID, GBANLOG_CHATID_USER
+from userbot import CMD_HELP, bot, trgg, GBANLOG_CHATID, GBAN_ENF_CHATID, tgbott, DEVS, BOTLOG_CHATID, GBANLOG_CHATID_USER, TIMEOUT
 from userbot.events import register
 import userbot.modules.sql_helper.gban_sql_helper as gban_sql
 from telethon.tl.types import ChatBannedRights, Channel
@@ -59,34 +59,39 @@ async def admin_groups(grp):
             admgroups.append(entity.id)
     return admgroups
 
-@register(outgoing=True, disable_edited=True, pattern=r"^\{trg}execban(-d |-s | .*)(-e|-g|-f)($|-m | )(.*)".format(trg=trgg))
+
+@register(outgoing=True, disable_edited=True, pattern=r"^\{trg}(exec|auto)ban(-d |-s | .*)(-e|-g|-f)($|-m | )(.*)".format(trg=trgg))
 async def execban(event):
     # manual
-    if event.pattern_match.group(3) == "-m ":
+    if event.pattern_match.group(4) == "-m ":
         if event.is_reply:
             return await event.edit("**Manual Ban can't be executed on a replied message**")
         else:
-            if event.pattern_match.group(4):
-                match = event.pattern_match.group(4)
+            if event.pattern_match.group(5):
+                match = event.pattern_match.group(5)
                 pattern = match.split()
                 msggprf = None
                 try:
                     fban_id = pattern[0]
                     reason = " ".join(pattern[1:])
+                    if reason:
+                        pass
+                    else:
+                        reason = "404"
                 except IndexError:
                     return await event.edit("**No input given.**")
             else:    
                 return await event.edit("**No input given.**")
     # reply
-    if event.pattern_match.group(3) != "-m ":
+    if event.pattern_match.group(4) != "-m ":
         if event.is_reply:
             reply_msg = await event.get_reply_message()
             fban_id = reply_msg.sender_id
-            if event.pattern_match.group(4):
-                match = event.pattern_match.group(4)
+            if event.pattern_match.group(5):
+                match = event.pattern_match.group(5)
                 reason = match
             else:
-                reason = None
+                reason = "404"
             if reply_msg:
                 try:
                     msggprf = await event.client.forward_messages(GBANLOG_CHATID, reply_msg)
@@ -97,12 +102,116 @@ async def execban(event):
     # don't gban sender or owner or dev
     if event.sender_id == fban_id or fban_id == (await event.client.get_me()).id or fban_id in DEVS:
         return await event.edit("**Permission Denied**")
-    if event.pattern_match.group(2) == "-g":
+    # autoreason
+    if event.pattern_match.group(1) == "exec":
+        await banexec(event, fban_id, reason, msggprf)
+    elif event.pattern_match.group(1) == "auto":
+        await autoreason(event, fban_id, reason, msggprf)
+
+async def autoreason(event, fban_id, areason, msggprf):
+    if areason == "btc":
+        reason = "0xSPAM [auto detected] match on bitcoin."
+    if areason == "bot":
+        reason = "0xSPAM [auto detected] spambot."
+    if areason == "spambot":
+        reason = "0xSPAM [auto detected] spambot."
+    if areason == "spam bot":
+        reason = "0xSPAM [auto detected] spambot."
+    if areason == "crypto":
+        reason = "0xSPAM [auto detected] match on crypto."
+    if areason == "scam":
+        reason = "0xSPAM [auto detected scam]."
+    if areason == "earn":
+        reason = "0xSPAM [auto detected] match on earn."
+    if areason == "trading":
+        reason = "0xSPAM [auto detected] match on trade-trading."
+    if areason == "spam":
+        reason = "0xSPAM [auto detected]"
+
+    if areason.startswith("spam "):
+        rsn = areason.partition("spam ")[2]
+        reason = f"0xSPAM [auto detected] // {rsn}"
+    if areason.startswith("scam "):
+        rsn = areason.partition("scam ")[2]
+        reason = f"0xSPAM [auto detected] // {rsn}"
+###################
+    if areason == "pm":
+        reason = "0xPUP [auto detected] pm spammer."
+    if areason == "leaker":
+        reason = "0xPUP [auto detected] leaker"
+    if areason == "leak":
+        reason = "0xPUP [auto detected] leak"
+    if areason == "pup":
+        reason = "0xPUP [auto detected]"
+
+    if areason.startswith("pup "):
+        rsn = areason.partition("pup ")[2]
+        reason = f"0xPUP [auto detected] // {rsn}"
+###################
+    if areason == "+18":
+        reason = "0xNSFW [auto detected] +18 bot."
+    if areason == "nsfw":
+        reason = "0xNSFW [auto detected] nsfw bot."
+
+    if areason.startswith("nsfw "):
+        rsn = areason.partition("nsfw ")[2]
+        reason = f"0xNSFW [auto detected] // {rsn}."
+###################
+    if areason == "alt":
+        reason = "0xEVADE [auto detected] alt"
+    if areason == "evade":
+        reason = "0xEVADE [auto detected] evading ban"
+
+    if areason.startswith("evade "):
+        rsn = areason.partition("evade ")[2]
+        reason = f"0xEVADE [auto detected] // {rsn}"
+###################
+    if areason == "imper":
+        reason = "0xIMPER [auto detected] impersonator"
+
+    if areason.startswith("imper "):
+        rsn = areason.partition("imper ")[2]
+        reason = f"0xIMPER [auto detected] // {rsn}"
+###################
+    if areason == "raid":
+        reason = "0xRAID [auto detected]"
+
+    if areason.startswith("raid "):
+        rsn = areason.partition("raid ")[2]
+        reason = f"0xRAID [auto detected] // {rsn}"
+###################
+    if areason == "-":
+        reason = "0x0 [null]"
+
+    if areason == "x":
+        reason = "0x? [no input]"
+
+
+    if areason.startswith("-r "):
+        reasonn = areason.partition("-r ")[2]
+        try:
+            rsnn = reasonn.partition(" ")[0].upper()
+            rsn = reasonn.partition(" ")[2]
+            reason = f"0x{rsnn} // {rsn}"
+        except Exception:
+            reason = "0x? [no input]"
+
+    else:
+        if areason == "404":
+            reason = "0x? [no input]"
+        else:
+            reason = "0xOTHER // "
+            reason += areason
+
+    await banexec(event, fban_id, reason, msggprf)
+
+async def banexec(event, fban_id, reason, msggprf):
+    if event.pattern_match.group(3) == "-g":
         await mgban(event, fban_id, reason, msggprf)
-    if event.pattern_match.group(2) == "-e":
+    if event.pattern_match.group(3) == "-e":
         gcount = 0
         await gban(event, fban_id, reason, msggprf, gcount)
-    if event.pattern_match.group(2) == "-f":
+    if event.pattern_match.group(3) == "-f":
         gcount = 0
         await fban(event, fban_id, reason, msggprf, gcount)
 
@@ -141,7 +250,6 @@ async def gban(event, fban_id, reason, msggprf, gcount):
     except Exception:
         pass
     user_link = f"[{fban_id}](tg://user?id={fban_id})"
-    reason = reason if reason else "404"
     if GBAN_ENF_CHATID:
         await event.edit(f"**Executing GlobalBan** for {user_link}...")
         if msggprf != None:
@@ -182,7 +290,6 @@ async def fban(event, fban_id, reason, msggprf, gcount):
                             failed.append(i.fed_name)
                 except Exception:
                     failed.append(i.fed_name)
-            reason = reason if reason else "404"
             if failed:
                 status = f"\n**Feds Affected:** {total} \n**Failed in:** {len(failed)}\n"
                 for i in failed:
@@ -197,37 +304,39 @@ async def banlog(event, fban_id, reason, msggprf, gcount, user_link, status, tot
     await sleep(1)
     sender = await event.get_sender()
     sender_link = f"[{sender.id}](tg://user?id={sender.id})"
-    reason = reason if reason else "404"
     if user_link:
         user_link = user_link
     else: 
         user_link = fban_id
     # messages
-    if event.pattern_match.group(2) == "-g":
+    if event.pattern_match.group(3) == "-g":
         enforced_ban_string = f"#ENFORCED\n**Global Ban**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\nBan Reason: {reason}\nFeds Affected = {total}\nGban Status = Enforced\nManual GBan = True\nGroups Affected = {gcount}"
-        donemsg = f"#GlobalBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n**Feds Affected:** {status}\n**Bots Affected:** 7\n**Manual Actions:**\n**Banned in:** {status} **Groups**"
-    if event.pattern_match.group(2) == "-e":
+        donemsg = f"#GlobalBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n{status}\n**Bots Affected:** 7\n**Manual Actions:**\n**Banned in:** {status} **Groups**"
+    if event.pattern_match.group(3) == "-e":
         enforced_ban_string = f"#ENFORCED\n**GBan**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\nBan Reason: {reason}\nFeds Affected = {total}\nGban Status = Enforced"
-        donemsg = f"#FedBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n**Feds Affected:** {status}\n**Bots Affected:** 7"
-    if event.pattern_match.group(2) == "-f":
+        donemsg = f"#GBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n{status}\n**Bots Affected:** 7"
+    if event.pattern_match.group(3) == "-f":
         enforced_ban_string = f"#ENFORCED\nFedBan\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\nBan Reason: {reason}\nFeds Affected: {total}"
-        donemsg = f"#GBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n**Feds Affected:** {status}"
+        donemsg = f"#FedBan\n**Target User** = {user_link}!\n**Ban Reason:** {reason}\n{status}"
     # log
     if msggprf != None:
-        enforced_ban_string += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/c/{GBANLOG_CHATID_USER}/{msggprf.id})"
-        donemsg += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/c/{GBANLOG_CHATID_USER}/{msggprf.id})"
-    await tgbott.send_message(GBANLOG_CHATID, enforced_ban_string)
+        enforced_ban_string += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+        donemsg += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+    await tgbott.send_message(GBANLOG_CHATID, enforced_ban_string, link_preview=False)
     await event.edit(donemsg)
-    if event.pattern_match.group(1) == "-s ":
+
+
+    if event.pattern_match.group(2) == "-s ":
         await sleep(2)
         try:
             await event.delete()
         except Exception:
             pass
-    if event.pattern_match.group(1) == "-d ":
+
+    if event.pattern_match.group(2) == "-d ":
         if event.is_reply:
+            await sleep(2)
             try:
-                await sleep(2)
                 await event.get_reply_message.delete()
             except Exception:
                 pass
@@ -242,7 +351,7 @@ async def rexecban(event):
     # manual
     if event.pattern_match.group(3) == "-m ":
         if event.is_reply:
-            return await event.edit("**Manual Ban can't be executed on a replied message**")
+            return await event.edit("**Manual UnBan can't be executed on a replied message**")
         else:
             if event.pattern_match.group(4):
                 match = event.pattern_match.group(4)
@@ -393,8 +502,8 @@ async def rbanlog(event, fban_id, reason, msggprf, gcount, user_link, status, to
         donemsg = f"#Revert_GBan\n**Target User** = {user_link}!\n**UnBan Reason:** {reason}\n**Feds Affected:** {status}"
     # log
     if msggprf != None:
-        enforced_ban_string += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/c/{GBANLOG_CHATID}/{msggprf.id})"
-        donemsg += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/c/{GBANLOG_CHATID}/{msggprf.id})"
+        enforced_ban_string += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/{GBANLOG_CHATID}/{msggprf.id})"
+        donemsg += f"\n--------------\nMessage Count: #[{msggprf.id}](https://t.me/{GBANLOG_CHATID}/{msggprf.id})"
     await tgbott.send_message(GBANLOG_CHATID, enforced_ban_string.format(sender_link=sender_link, user_link=user_link, reason=reason, total=total))
     await event.edit(donemsg)
     if event.pattern_match.group(1) == "-s":
@@ -405,21 +514,66 @@ async def rbanlog(event, fban_id, reason, msggprf, gcount, user_link, status, to
             pass
 
 
+@register(outgoing=True, pattern="^\{trg}bantags$".format(trg=trgg))
+async def bantags(event):
+    await event.edit("List of tags used in bans:\n`0xSPAM`-`0xPUP`-`0xNSFW`-`0xEVADE`-`0xIMPER`-`0xRAID`-`0x0``-`0x?`-`0xOTHER`")
+    await sleep(30)
+        
+    if TIMEOUT:
+        await event.delete() 
+
+
+@register(outgoing=True, pattern="^\{trg}banstr$".format(trg=trgg))
+async def banstr(event):
+    await event.edit(
+        "\n\n0xSPAM"
+        "\nbtc,bot,spambot,spam bot,crypto,scam,earn,trading,spam,spam .*,scam .*"
+        "\n\n0xPUP"
+        "\npm,leaker,leak,pup,pup .*"
+        "\n\n0xNSFW"
+        "\n+18,nsfw,nsfw .*"
+        "\n\n0xEVADE"
+        "\nalt,evade,evade .*"
+        "\n\n0xIMPER"
+        "\nimper,imper .*"
+        "\n\n0xRAID"
+        "\nraid,raid .*"
+        "\n\n0x0 "
+        "\n-"
+        "\n\n0x?"
+        "\nx"
+        "\n-r"
+        "\n\n0xOTHER"
+    )
+    await sleep(30)
+        
+    if TIMEOUT:
+        await event.delete() 
+
+
 CMD_HELP.update(
     {
-        "bans": ">`{trgg}execban <args>`"
-        "\nargs are:(-d |-s | .*)(-e|-g|-f)($|-m | )(.*)<id/username> <reason>"
-        "\nUsage: Ban user."
-        "\nUser can be banned from connected Federations, Group bots, and where the sender is admin, depending on the passed args."
-        "\nYou can reply to the user whom you want to ban or manually pass the username/id with the required args."
-        "\nMake sure to set it up correctly or it won't work."
-        "\n>`{trgg}revert <args>`"
-        "\nargs are:(-s | .*)(-e|-g|-f)($|-m | )(.*)<id/username> <reason>"
-        "\nUsage: Reverts the execban."
-        "\nUser can be unbanned from connected Federations, Group bots, and where the sender is admin, depending on the passed args."
-        "\nYou can reply to the user whom you want to unban or manually pass the username/id with the required args."
-        "\nMake sure to set it up correctly or it won't work."
+        "bans": f">`{trgg}execban<args>`"
+        f"\n>`{trgg}autoban<args>`"
+        f"\n\nargs are:(-d |-s | .*)(-e|-g|-f)($|-m | )(.*)<id/username> <reason>"
+        f"\nautoban uses a detected reason (if it exists)"
+        f"\nUsage: Ban user."
+        f"\nUser can be banned from connected Federations, Group bots, and where the sender is admin, depending on the passed args."
+        f"\nYou can reply to the user whom you want to ban or manually pass the username/id with the required args."
+        f"\nMake sure to set it up correctly or it won't work."
+        f"\n\n>`{trgg}revert <args>`"
+        f"\nargs are:(-s | .*)(-e|-g|-f)($|-m | )(.*)<id/username> <reason>"
+        f"\nUsage: Reverts the execban."
+        f"\nUser can be unbanned from connected Federations, Group bots, and where the sender is admin, depending on the passed args."
+        f"\nYou can reply to the user whom you want to unban or manually pass the username/id with the required args."
+        f"\nMake sure to set it up correctly or it won't work."
     }
+
 )
 
-
+CMD_HELP.update(
+    {
+        "bantags": f">`{trgg}bantags`"
+        "\nshow the list of tags used in bans --  meaning added soon"
+    }
+)

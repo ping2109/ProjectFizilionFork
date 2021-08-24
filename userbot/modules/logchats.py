@@ -37,7 +37,8 @@ async def monito_p_m_s(event):  # sourcery no-metrics
     sender = await event.get_sender()
     if not sender.bot:
         chat = await event.get_chat()
-        if not pm_permit_sql.is_approved(chat.id) and chat.id != 777000:
+        # if not pm_permit_sql.is_approved(chat.id) and chat.id != 777000:
+        if not chat.id != 777000:
             if LOG_CHATS_.RECENT_USER != chat.id:
                 LOG_CHATS_.RECENT_USER = chat.id
                 if LOG_CHATS_.NEWPM:
@@ -95,7 +96,14 @@ async def log_tagged_messages(event):
     if messaget is not None:
         resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
     else:
-        resalt += f"\n<b>Message : </b>{event.message.message}"
+        try:
+            if event.message.message.find("@") == "-1":
+                msgggg = event.message.message
+            else:
+                msgggg = event.message.message.replace("@", "@ ")
+        except Exception as e:
+            LOGS.warn(str(e))
+        resalt += f"\n<b>Message : </b>\n{msgggg}"
     resalt += f"\n<b>Message link: </b><a href = 'https://t.me/c/{hmm.id}/{event.message.id}'> link</a>"
     if not event.is_private:
         await tgbott.send_message(

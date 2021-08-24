@@ -218,7 +218,7 @@ MEGA_PASSWORD = os.environ.get("MEGA_PASSWORD") or None
 
 # gban group
 GBANLOG_CHATID = int(os.environ.get("GBANLOG_CHATID") or 0)
-GBANLOG_CHATID_USER = int(os.environ.get("GBANLOG_CHATID_USER") or 0)
+GBANLOG_CHATID_USER = os.environ.get("GBANLOG_CHATID_USER")
 GBAN_ENF_CHATID = int(os.environ.get("GBAN_ENF_CHATID") or 0)
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
