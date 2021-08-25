@@ -63,6 +63,15 @@ async def repeattt(event):
     await event.delete()
     await event.respond(textx)
 
+@register(outgoing=True, pattern="^\{trg}drp$".format(trg=trgg))
+async def drepeattt(event):
+    textx = await event.get_reply_message()
+    await event.delete()
+    try:
+        await textx.delete()
+    except Exception:
+        pass
+    await event.respond(textx)
 
 @register(outgoing=True, pattern="^\{trg}picspam".format(trg=trgg))
 async def tiny_pic_spam(pspam):
@@ -101,7 +110,9 @@ CMD_HELP.update(
 \n\n.spam <count> <text>\
 \nUsage: Floods text in the chat !!\
 \n\n.rp\
-\nUsage: Repeats the replier message!!\
+\nUsage: Repeats the replied message!!\
+\n\n.drp\
+\nUsage: Repeats the replied message and deletes the main one!!\
 \n\n.wspam <text>\
 \nUsage: Spam the text word by word.\
 \n\n.picspam <count> <link to image/gif>\
