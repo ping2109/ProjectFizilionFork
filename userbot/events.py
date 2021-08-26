@@ -12,10 +12,9 @@ from asyncio import subprocess as asyncsub
 from os import remove
 from time import gmtime, strftime
 from traceback import format_exc
-from asyncio import sleep 
-from telethon import events
-
-from userbot import LOGSPAMMER, BOTLOG, BOTLOG_CHATID, bot
+import time 
+from telethon import events, errors
+from userbot import LOGSPAMMER, BOTLOG_CHATID, bot, tgbott
 
 
 def register(**args):
@@ -23,7 +22,7 @@ def register(**args):
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
     ignore_unsafe = args.get('ignore_unsafe', False)
-    unsafe_pattern = r'^[^/!#@\*:;$A-Za-z,?İşŞğĞüÜöÖIıÇç]'
+    unsafe_pattern = r'^[^/!#@\*$A-Za-z]'
     groups_only = args.get('groups_only', False)
     trigger_on_fwd = args.get('trigger_on_fwd', False)
     disable_errors = args.get('disable_errors', False)
@@ -78,6 +77,12 @@ def register(**args):
             try:
                 await func(check)
 
+            except errors.FloodWaitError as fw:
+                await tgbott.send_message(BOTLOG_CHATID, f"`Umm, we have an issue...:\nA flood wait error has been raised.\n{str(fw)}\n\nI will sleep for a bit.`")
+                time.sleep(fw.seconds)
+                await tgbott.send_message(BOTLOG_CHATID, "`I'm back online!`")
+
+
             # Thanks to @kandnub for this HACK.
             # Raise StopPropagation to Raise StopPropagation
             # This needed for AFK to working properly
@@ -98,17 +103,11 @@ def register(**args):
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**USERBOT ERROR REPORT**\n"
-                    link = "[Userbot Support](https://t.me/ProjectFizilion)"
-                    text += "If you want to, you can report it"
-                    text += f". Head and forward this message to Support Group.\n"
+                    text += "Umm an issue happened and it's been logged here.\n"
                     text += "Nothing is logged except the fact of error and date\n"
 
                     ftext = "========== DISCLAIMER =========="
-                    ftext += "\nThis file uploaded ONLY here,"
-                    ftext += "\nwe logged only fact of error and date,"
-                    ftext += "\nwe respect your privacy,"
-                    ftext += "\nyou may not report this error if you've"
-                    ftext += "\nany confidential data here, no one will see your data\n"
+                    ftext += "\nAlready know it...\nError and date are logged.\n"
                     ftext += "================================\n\n"
                     ftext += "--------BEGIN USERBOT TRACEBACK LOG--------\n"
                     ftext += "\nDate: " + date
@@ -139,12 +138,18 @@ def register(**args):
                     file.write(ftext)
                     file.close()
 
+                    txtt = "Umm an issue has ocurred...\n\n"
+                    txtt += "Chat: " + str(check.chat_id)
+                    txtt += "\n\nErr: " + str(sys.exc_info()[1])
+
                     if LOGSPAMMER:
-                       await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)
+                        await tgbott.send_message(BOTLOG_CHATID, txtt)
+                        await tgbott.send_file(BOTLOG_CHATID, "error.log", caption=text)
                                                  
                                                  
                     else: 
-                       await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)
+                        await tgbott.send_message('me', txtt)
+                        await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)
                                                  
                                                  
                     remove("error.log")
