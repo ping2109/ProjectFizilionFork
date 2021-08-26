@@ -137,81 +137,81 @@ async def execban(event):
 
 async def autoreason(event, fban_id, areason, msggprf):
     if areason == "btc":
-        reason = "0xSPAM <auto detected> match on bitcoin."
+        reason = "0xSPAM -auto detected- match on bitcoin."
     elif areason == "bot":
-        reason = "0xSPAM <auto detected> spambot."
+        reason = "0xSPAM -auto detected- spambot."
     elif areason == "spambot":
-        reason = "0xSPAM <auto detected> spambot."
+        reason = "0xSPAM -auto detected- spambot."
     elif areason == "spam bot":
-        reason = "0xSPAM <auto detected> spambot."
+        reason = "0xSPAM -auto detected- spambot."
     elif areason == "crypto":
-        reason = "0xSPAM <auto detected> match on crypto."
+        reason = "0xSPAM -auto detected- match on crypto."
     elif areason == "scam":
-        reason = "0xSPAM <auto detected scam>."
+        reason = "0xSPAM -auto detected scam-."
     elif areason == "earn":
-        reason = "0xSPAM <auto detected> match on earn."
+        reason = "0xSPAM -auto detected- match on earn."
     elif areason == "trading":
-        reason = "0xSPAM <auto detected> match on trade-trading."
+        reason = "0xSPAM -auto detected- match on trade-trading."
     elif areason == "spam":
-        reason = "0xSPAM <auto detected>"
+        reason = "0xSPAM -auto detected-"
 
     elif areason.startswith("spam "):
         rsn = areason.partition("spam ")[2]
-        reason = f"0xSPAM <auto detected> // {rsn}"
+        reason = f"0xSPAM -auto detected- // {rsn}"
     elif areason.startswith("scam "):
         rsn = areason.partition("scam ")[2]
-        reason = f"0xSPAM <auto detected> // {rsn}"
+        reason = f"0xSPAM -auto detected- // {rsn}"
 ###################
     elif areason == "pm":
-        reason = "0xPUP <auto detected> pm spammer."
+        reason = "0xPUP -auto detected- pm spammer."
     elif areason == "leaker":
-        reason = "0xPUP <auto detected> leaker"
+        reason = "0xPUP -auto detected- leaker"
     elif areason == "leak":
-        reason = "0xPUP <auto detected> leak"
+        reason = "0xPUP -auto detected- leak"
     elif areason == "pup":
-        reason = r"0xPUP <auto detected>"
+        reason = r"0xPUP -auto detected-"
 
     elif areason.startswith("pup "):
         rsn = areason.partition("pup ")[2]
-        reason = f"0xPUP <auto detected> // {rsn}"
+        reason = f"0xPUP -auto detected- // {rsn}"
 ###################
     elif areason == "+18":
-        reason = "0xNSFW <auto detected> +18 bot."
+        reason = "0xNSFW -auto detected- +18 bot."
     elif areason == "nsfw":
-        reason = "0xNSFW <auto detected> nsfw bot."
+        reason = "0xNSFW -auto detected- nsfw bot."
 
     elif areason.startswith("nsfw "):
         rsn = areason.partition("nsfw ")[2]
-        reason = f"0xNSFW <auto detected> // {rsn}."
+        reason = f"0xNSFW -auto detected- // {rsn}."
 ###################
     elif areason == "alt":
-        reason = "0xEVADE <auto detected> alt"
+        reason = "0xEVADE -auto detected- alt"
     elif areason == "evade":
-        reason = "0xEVADE <auto detected> evading ban"
+        reason = "0xEVADE -auto detected- evading ban"
 
     elif areason.startswith("evade "):
         rsn = areason.partition("evade ")[2]
-        reason = f"0xEVADE <auto detected> // {rsn}"
+        reason = f"0xEVADE -auto detected- // {rsn}"
 ###################
     elif areason == "imper":
-        reason = "0xIMPER <auto detected> impersonator"
+        reason = "0xIMPER -auto detected- impersonator"
 
     elif areason.startswith("imper "):
         rsn = areason.partition("imper ")[2]
-        reason = f"0xIMPER <auto detected> // {rsn}"
+        reason = f"0xIMPER -auto detected- // {rsn}"
 ###################
     elif areason == "raid":
-        reason = "0xRAID <auto detected>"
+        reason = "0xRAID -auto detected-"
 
     elif areason.startswith("raid "):
         rsn = areason.partition("raid ")[2]
-        reason = f"0xRAID <auto detected> // {rsn}"
+        reason = f"0xRAID -auto detected- // {rsn}"
 ###################
     elif areason == "-":
-        reason = "0x0 <null>"
+        reason = "0x0 -null-"
 
     elif areason == "x":
-        reason = "0x? <no input>"
+        reason = "0x? -no input-"
 
 
     elif areason.startswith("-r "):
@@ -221,10 +221,10 @@ async def autoreason(event, fban_id, areason, msggprf):
             rsn = reasonn.partition(" ")[2]
             reason = f"0x{rsnn} // {rsn}"
         except Exception:
-            reason = "0x? <no input>"
+            reason = "0x? -no input-"
 
     elif areason == "404":
-        reason = "0x? <no input>"
+        reason = "0x? -no input-"
     elif areason == "Not specified":
         reason = "Not specified"
 
@@ -234,7 +234,7 @@ async def autoreason(event, fban_id, areason, msggprf):
             rsn = reasonn.partition(" ")[2]
             reason = f"0xOTHER // {rsn}"
         except Exception:
-            reason = "0x? <no input>"
+            reason = "0x? -no input-"
 
     else:
         reason = "0xOTHER // "
@@ -464,10 +464,10 @@ async def unexecban(event):
 async def unautoreason(event, fban_id, areason, msggprf):
 
     if areason == "-":
-        reason = "0x0 <null>"
+        reason = "0x0 -null-"
 
     elif areason == "x":
-        reason = "0x? <no input>"
+        reason = "0x? -no input-"
 
 
     elif areason.startswith("-r "):
@@ -477,10 +477,10 @@ async def unautoreason(event, fban_id, areason, msggprf):
             rsn = reasonn.partition(" ")[2]
             reason = f"0x{rsnn} // {rsn}"
         except Exception:
-            reason = "0x? <no input>"
+            reason = "0x? -no input-"
 
     elif areason == "404":
-        reason = "0x? <no input>"
+        reason = "0x? -no input-"
     elif areason == "Not specified":
         reason = "Not specified"
 
@@ -490,7 +490,7 @@ async def unautoreason(event, fban_id, areason, msggprf):
             rsn = reasonn.partition(" ")[2]
             reason = f"0xOTHER // {rsn}"
         except Exception:
-            reason = "0x? <no input>"
+            reason = "0x? -no input-"
 
     else:
         reason = "0xOTHER // "
@@ -703,7 +703,7 @@ async def banstr(event):
 
 CMD_HELP.update(
     {
-        "bans": f">`{trgg}execban<args>`"
+        "bans": f">`{trgg}execban-args>`"
         f"\n>`{trgg}autoban<args>`"
         f"\n\nargs are:(-d |-s |-i | .*)(-e|-g|-f)($|-m | )(.*)<id/username> <reason>"
         f"\nautoban uses a detected reason (if it exists)"
