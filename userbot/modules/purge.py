@@ -199,7 +199,7 @@ async def purgfromto(prgnew):
 async def purgfrm(prgfrm):
     prgstrtmsg = prgfrm.reply_to_msg_id
     purgemsgs[prgfrm.chat_id] = prgstrtmsg
-    aa = await prgfrm.edit("This message has been selected as the purge start, reply to another message by .purgeto to delete between them.")
+    aa = await prgfrm.edit("This message has been selected as the purge start.")
     await sleep(2)
     await aa.delete()
 
@@ -226,8 +226,8 @@ async def purgto(prgto):
         if pmsgs:
             await prgto.client.delete_messages(chat, pmsgs)
             await prgto.delete()
-        aaa = await prgto.reply(f"`Fast purge complete!`\nPurged {str(msgz)} messages")
-        await sleep(5)
+        aaa = await prgto.reply(f"`Fast purge executed!`\nrm -rf {str(msgz)} messages")
+        await sleep(2)
         await aaa.delete()
     except Exception as er:
         await prgto.edit(f"Umm an issue happened...\nERROR:\n`{str(er)}`")
