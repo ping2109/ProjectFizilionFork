@@ -13,7 +13,10 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^\{trg}cspam (.*)".format(trg=trgg))
 async def leter_spam(cspammer):
-    cspam = str(cspammer.pattern_match.group(1))
+    try:
+        cspam = str(cspammer.pattern_match.group(1))
+    except ValueError:
+        return
     message = cspam.replace(" ", "")
     await cspammer.delete()
     for letter in message:
@@ -26,7 +29,10 @@ async def leter_spam(cspammer):
 
 @register(outgoing=True, pattern="^\{trg}wspam (.*)".format(trg=trgg))
 async def word_spam(wspammer):
-    wspam = str(wspammer.pattern_match.group(1))
+    try:
+        wspam = str(wspammer.pattern_match.group(1))
+    except ValueError:
+        return
     message = wspam.split()
     await wspammer.delete()
     for word in message:
@@ -39,7 +45,10 @@ async def word_spam(wspammer):
 
 @register(outgoing=True, pattern="^\{trg}spam (.*)".format(trg=trgg))
 async def spammer(spamm):
-    counter = int(spamm.pattern_match.group(1).split(" ", 1)[0])
+    try:
+        counter = int(spamm.pattern_match.group(1).split(" ", 1)[0])
+    except ValueError:
+        return
     textx = await spamm.get_reply_message()
     if not textx:
         spam_message = str(spamm.pattern_match.group(1).split(" ", 1)[1])
