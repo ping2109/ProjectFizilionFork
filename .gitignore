@@ -13,3 +13,5 @@ bin/*
 *.session
 *.session-journal
 *.temp
+start.sh
+stop.sh

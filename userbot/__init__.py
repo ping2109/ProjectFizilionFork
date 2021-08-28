@@ -221,6 +221,7 @@ GBANLOG_CHATID = int(os.environ.get("GBANLOG_CHATID") or 0)
 GBANLOG_CHATID_USER = os.environ.get("GBANLOG_CHATID_USER")
 GBAN_ENF_CHATID = int(os.environ.get("GBAN_ENF_CHATID") or 0)
 
+AFK_CHATID = int(os.environ.get("AFK_CHATID") or 0)
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
 # and giving them correct perms to work properly.
 if not os.path.exists("bin"):
@@ -307,6 +308,8 @@ ZALG_LIST = {}
 ISAFK = False
 AFKREASON = None
 DELMSG = False
+
+BOTAFK = False
 
 ##Constants
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
