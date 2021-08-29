@@ -13,10 +13,7 @@ from userbot.events import register
 
 @register(outgoing=True, pattern="^\{trg}cspam (.*)".format(trg=trgg))
 async def leter_spam(cspammer):
-    try:
-        cspam = str(cspammer.pattern_match.group(1))
-    except ValueError:
-        return
+    cspam = str(cspammer.pattern_match.group(1))
     message = cspam.replace(" ", "")
     await cspammer.delete()
     for letter in message:
@@ -29,10 +26,7 @@ async def leter_spam(cspammer):
 
 @register(outgoing=True, pattern="^\{trg}wspam (.*)".format(trg=trgg))
 async def word_spam(wspammer):
-    try:
-        wspam = str(wspammer.pattern_match.group(1))
-    except ValueError:
-        return
+    wspam = str(wspammer.pattern_match.group(1))
     message = wspam.split()
     await wspammer.delete()
     for word in message:
@@ -49,7 +43,7 @@ async def spammer(spamm):
         counter = int(spamm.pattern_match.group(1).split(" ", 1)[0])
     except IndexError:
         await spamm.edit("The usage of this command is .spam <count> <text> or .spam <count> replyiing to a message")
-        await sleep(5)
+        await sleep(1)
         await spamm.delete()
         return
     textx = await spamm.get_reply_message()
@@ -58,7 +52,7 @@ async def spammer(spamm):
             spam_message = str(spamm.pattern_match.group(1).split(" ", 1)[1])
         except IndexError:
             await spamm.edit("The usage of this command is .spam <count> <text> or .spam <count> replyiing to a message")
-            await sleep(5)
+            await sleep(1)
             await spamm.delete()
             return
         await spamm.delete()
@@ -100,7 +94,7 @@ async def tiny_pic_spam(pspam):
         link = str(text[2])
     except IndexError:
         await pspam.edit("The usage of this command is .picspam <count> <link to image/gif>")
-        await sleep(5)
+        await sleep(1)
         await pspam.delete()
         return
     await pspam.delete()
@@ -120,7 +114,7 @@ async def dspammer(dspam):
         spam_message = str(dspam.pattern_match.group(1).split(" ", 2)[2])
     except IndexError:
         await dspam.edit("The usage of this command is .delayspam <delay> <count> <text>")
-        await sleep(5)
+        await sleep(1)
         await dspam.delete()
         return
     await dspam.delete()
