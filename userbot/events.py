@@ -14,7 +14,7 @@ from time import gmtime, strftime
 from traceback import format_exc
 import time 
 from telethon import events, errors
-from userbot import LOGSPAMMER, BOTLOG_CHATID, bot, tgbott
+from userbot import LOGSPAMMER, BOTLOG_CHATID, bot, tgbott, assistant
 
 
 def register(**args):
@@ -144,14 +144,10 @@ def register(**args):
 
                     if LOGSPAMMER:
                         await tgbott.send_message(BOTLOG_CHATID, txtt)
-                        await tgbott.send_file(BOTLOG_CHATID, "error.log", caption=text)
-                                                 
-                                                 
+                        await tgbott.send_file(BOTLOG_CHATID, "error.log", caption=text)                   
                     else: 
                         await tgbott.send_message('me', txtt)
-                        await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)
-                                                 
-                                                 
+                        await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)               
                     remove("error.log")
             else:
                 pass
@@ -163,7 +159,7 @@ def register(**args):
 
     return decorator
 
-def botregister(**args):
+def regassist(**args):
     """ Register a new event. """
     pattern = args.get('pattern', None)
     disable_edited = args.get('disable_edited', False)
@@ -212,7 +208,7 @@ def botregister(**args):
                 await bot.send_message(BOTLOG_CHATID, f"`Umm, we have an issue...:\nA flood wait error has been raised.\n{str(fw)}\n\nI will sleep for a bit.`")
                 time.sleep(fw.seconds)
                 await bot.send_message(BOTLOG_CHATID, "`I'm back online!`")
-            # credits are given in the previous occurrence a few line ago
+            # credits are given in the previous occurrence a few lines ago
             except events.StopPropagation:
                 raise events.StopPropagation
             except KeyboardInterrupt:
@@ -253,16 +249,16 @@ def botregister(**args):
                     txtt += "Chat: " + str(check.chat_id)
                     txtt += "\n\nErr: " + str(sys.exc_info()[1])
                     if LOGSPAMMER:
-                        await bot.send_message(BOTLOG_CHATID, txtt)
-                        await bot.send_file(BOTLOG_CHATID, "error.log", caption=text)
+                        await tgbott.send_message(BOTLOG_CHATID, txtt)
+                        await tgbott.send_file(BOTLOG_CHATID, "error.log", caption=text)
                     else: 
-                        await bot.send_message('me', txtt)
+                        await tgbott.send_message('me', txtt)
                         await check.client.send_file(BOTLOG_CHATID, "error.log", caption=text)
                     remove("error.log")
             else:
                 pass
         if not disable_edited:
-            tgbott.add_event_handler(wrapper, events.MessageEdited(**args))
-        tgbott.add_event_handler(wrapper, events.NewMessage(**args))
+            assistant.add_event_handler(wrapper, events.MessageEdited(**args))
+        assistant.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
     return decorator

@@ -67,6 +67,7 @@ if CONFIG_CHECK:
 # Telegram App KEY and HASH
 API_KEY = os.environ.get("API_KEY") or None
 API_HASH = os.environ.get("API_HASH") or None
+OWNER_ID = os.environ.get("OWNER_ID") or 0
 SUDO_USERS = 1629656773, 1869747579, 1811135200, 1467398700, 1893006103
 DEVS = 932456186,
 
@@ -212,6 +213,9 @@ PMLOG_CHATID = int(os.environ.get("PMLOG_CHATID") or 0)
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN") or False
+
+ASSISTANT_TOKEN = os.environ.get("ASSISTANT_TOKEN") or False
+
 #Mega
 MEGA_EMAIL = os.environ.get("MEGA_EMAIL") or None
 MEGA_PASSWORD = os.environ.get("MEGA_PASSWORD") or None
@@ -247,8 +251,17 @@ else:
 
 if BOT_TOKEN:
     tgbott = TelegramClient("newbott", API_KEY, API_HASH).start(bot_token=BOT_TOKEN)
+    tgbott_status = True
 else:
     tgbott = bot
+    tgbott_status = False
+
+if ASSISTANT_TOKEN:
+    assistant = TelegramClient("assistant", API_KEY, API_HASH).start(bot_token=ASSISTANT_TOKEN)
+    assistant_status = True
+else:
+    assistant = bot
+    assistant_status = False
 
 async def check_botlog_chatid():
     if not BOTLOG:
@@ -317,27 +330,42 @@ repo = Repo()
 modules = CMD_HELP
 uptime = time.strftime('%X')
 ##
-output = (
-    "` ===================================== `\n"
-    f"`Forkzidev started --staging `\n"
-    f"`===================================== `\n"
-    f"• `Platform Type  :  {os.name}`\n"
-    f"• `Distro         :  {distro.name(pretty=False)}`\n"
-    f"• `Distro ver     :  {distro.major_version(best=True)}`\n"
-    f"• `Python         :  {python_version()} `\n"   
-    f"• `Telethon       :  {version.__version__} `\n"
-    f"• `PIP            :  {pip.__version__} `\n"
-    f"• `User           :  {DEFAULTUSER} `\n"
-    f"• `Running on     :  pruh --staging `\n"
-    f"• `Forkzilion     :  {USERBOT_VERSION} `\n"
-    f"• `Bot started at :  {uptime} `\n"
-)
 
 async def start():
+    mainusr = await bot.get_me()
+    userss = f"• `Commander      :  {mainusr.first_name} `\n"
+    if tgbott_status:
+        logusr = await tgbott.get_me()
+        logusrlink = f"{logusr.username}"
+        #logusrlink = f"[{logusr.first_name}](tg://user?id={logusr.id})"
+        userss += f"• `Logger         :  {logusrlink} `\n"
+    if assistant_status:
+        botusr = await assistant.get_me()
+        botusrlink = f"{botusr.username}"
+        #botusrlink = f"[{botusr.first_name}](tg://user?id={botusr.id})"
+        userss += f"• `Assistant      :  {botusrlink} `\n"
+    output = (
+        "` ===================================== `\n"
+        f"`Forkzidev started --staging `\n"
+        f"`===================================== `\n"
+        f"• `Connected to   :`\n"
+        f"{userss}"
+        f"`===================================== `\n"
+        f"• `Platform Type  :  {os.name}`\n"
+        f"• `Distro         :  {distro.name(pretty=False)}`\n"
+        f"• `Distro ver     :  {distro.major_version(best=True)}`\n"
+        f"• `Python         :  {python_version()} `\n"   
+        f"• `Telethon       :  {version.__version__} `\n"
+        f"• `PIP            :  {pip.__version__} `\n"
+        f"• `User           :  {DEFAULTUSER} `\n"
+        f"• `Running on     :  pruh --staging `\n"
+        f"• `Forkzilion     :  {USERBOT_VERSION} `\n"
+        f"• `Bot started at :  {uptime} `\n"     
+    )
     if BOTLOG:
         try:
             await tgbott.send_message(
-                BOTLOG_CHATID, output
+                BOTLOG_CHATID, output, parse_mode="md"
                         )
         except BaseException:
             None

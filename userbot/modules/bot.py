@@ -1,14 +1,13 @@
 # Copyright (C) 2021 AbOuLfOoOoOuF
 
-from userbot import CMD_HELP, trgg, tgbott, bot
-from userbot.events import botregister
+from userbot import CMD_HELP, trgg, bot, OWNER_ID, tgbott, BOTLOG_CHATID
+from userbot.events import regassist
+from telethon import Button, errors
+from asyncio import sleep
 
-
-@botregister(pattern=f"^\{trgg}echo($| .*)")
+@regassist(pattern=f"^\{trgg}echo($| .*)")
 async def echoo(event):
-    chat = event.chat_id
-    entity = await tgbott.get_entity(chat)
-    if entity.default_banned_rights.send_messages: 
+    if event.sender.id is OWNER_ID:
         return
     else:
         if event.is_reply:
@@ -17,16 +16,27 @@ async def echoo(event):
             echoo = event.pattern_match.group(1)
         if echoo:
             await event.delete()
-            await tgbott.send_message(chat, echoo)
+            await event.respond(echoo)
         else:
             await event.delete()
 
-@botregister(pattern="/start")
+@regassist(pattern="/start$")
 async def startt(event):
-    chat = event.chat_id
     me = await bot.get_me()
-    startstr = f"Hello, this is Forkzilion and I'm [{me.first_name}](tg://user?id={me.id})'s assistant.\nIf ur interested in deploying this bot go to [Forkzilion repo](github.com/AbOuLfOoOoOuF/ProjectFizilionFork)."
-    await tgbott.send_message(chat, startstr, link_preview=False)
+    if event.sender.id != me.id:
+        await event.reply("Hewwo")
+    else:
+        if event.is_group and event.is_channel:
+            return
+        else:
+            try:
+                startstr = f"Hello, this is Forkzilion and I'm [{me.first_name}](tg://user?id={me.id})'s assistant.\nIf ur interested in deploying this bot, check out the button below."
+                strtbtn = [(Button.url("Repo", "https://github.com/AbOuLfOoOoOuF/ProjectFizilionFork"))]
+                await event.respond(startstr, buttons=strtbtn, link_preview=False)
+            except errors.FloodWaitError as fw:
+                dumb = f"[{event.sender.first_name}](tg://user?id={event.sender.id})"
+                msg = f"This idiot {dumb} is spamming your bot and caused it to hit flood limit.\nError:\n{fw}"
+                await tgbott.send_message(BOTLOG_CHATID, msg)
 
 CMD_HELP.update(
     {

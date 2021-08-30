@@ -292,14 +292,14 @@ async def gban(event, fban_id, reason, msggprf, gcount):
         await event.edit(f"**Executing GlobalBan** for {user_link}...")
         if msggprf != None:
             if reason == "Not specified":
-                gbannn = f"!gban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+                gbannn = f"/gban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
             elif reason != "Not specified":
-                gbannn = f"!gban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+                gbannn = f"/gban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
         else:
             if reason == "Not specified":
-                gbannn = f"!gban {user_link}"
+                gbannn = f"/gban {user_link}"
             elif reason != "Not specified":
-                gbannn = f"!gban {user_link} {reason}"
+                gbannn = f"/gban {user_link} {reason}"
         await event.client.send_message(GBAN_ENF_CHATID, gbannn, link_preview=False)
     await fban(event, fban_id, reason, msggprf, gcount)
 
@@ -327,14 +327,14 @@ async def fban(event, fban_id, reason, msggprf, gcount):
                     async with bot.conversation(chat) as conv:
                         if msggprf != None:
                             if reason == "Not specified":
-                                await conv.send_message(f"!fban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
+                                await conv.send_message(f"/fban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
                             elif reason != "Not specified":
-                                await conv.send_message(f"!fban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
+                                await conv.send_message(f"/fban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
                         else:
                             if reason == "Not specified":
-                                await conv.send_message(f"!fban {user_link}")
+                                await conv.send_message(f"/fban {user_link}")
                             if reason != "Not specified":
-                                await conv.send_message(f"!fban {user_link} {reason}")
+                                await conv.send_message(f"/fban {user_link} {reason}")
 
                         reply = await conv.get_response()
                         if not any(i in reply.text for i in fban_replies):
@@ -367,13 +367,13 @@ async def banlog(event, fban_id, reason, msggprf, gcount, user_link, status, sta
 
     # messages
     if event.pattern_match.group(3) == "-g":
-        enforced_ban_string = f"#ENFORCED\n**Global Ban**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\nBan Reason: {reason}\n**Feds Affected** = {total}\n**Gban Status** = `Enforced`\n**Manual GBan** = `True`\n**Groups Affected** = {gcount}"
-        donemsg = f"#GlobalBan\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{statuss}\n**Bots Affected:** 7\n**Manual Actions:**\n**Banned in:** {gcount} **Groups**"
+        enforced_ban_string = f"#ENFORCED\n**Global Ban**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\nBan Reason: {reason}\n{status}\n**Gban Status** = `Enforced`\n**Manual GBan** = `True`\n**Groups Affected** = {gcount}"
+        donemsg = f"#GlobalBan\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{staatuss}\n**Bots Affected:** 7\n**Manual Actions:**\n**Banned in:** {gcount} **Groups**"
     if event.pattern_match.group(3) == "-e":
-        enforced_ban_string = f"#ENFORCED\n**GBan**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n**Feds Affected** = {total}\n**Failed in:** {status}\n**Gban Status** = `Enforced`"
+        enforced_ban_string = f"#ENFORCED\n**GBan**\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{status}\n**Gban Status** = `Enforced`"
         donemsg = f"#GBan\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{staatuss}\n**Bots Affected:** 7"
     if event.pattern_match.group(3) == "-f":
-        enforced_ban_string = f"#ENFORCED\nFedBan\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n**Feds Affected:** {total}"
+        enforced_ban_string = f"#ENFORCED\nFedBan\n**Enforcer** = {sender_link}\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{status}"
         donemsg = f"#FedBan\n**Target User** = {user_link}\n**Ban Reason:** {reason}\n{staatuss}"
     # log
     if msggprf != None:
@@ -548,14 +548,14 @@ async def ungban(event, fban_id, reason, msggprf, gcount):
         await event.edit(f"**Reverting GlobalBan** for {user_link}...")
         if msggprf != None:
             if reason == "Not specified":
-                gbannn = f"!ungban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+                gbannn = f"/ungban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
             elif reason != "Not specified":
-                gbannn = f"!ungban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
+                gbannn = f"/ungban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})"
         else:
             if reason == "Not specified":
-                gbannn = f"!ungban {user_link}"
+                gbannn = f"/ungban {user_link}"
             elif reason != "Not specified":
-                gbannn = f"!ungban {user_link} {reason}"
+                gbannn = f"/ungban {user_link} {reason}"
         await event.client.send_message(GBAN_ENF_CHATID, gbannn, link_preview=False)
     await unfban(event, fban_id, reason, msggprf, gcount)
 
@@ -583,14 +583,14 @@ async def unfban(event, fban_id, reason, msggprf, gcount):
                     async with bot.conversation(chat) as conv:
                         if msggprf != None:
                             if reason == "Not specified":
-                                await conv.send_message(f"!unfban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
+                                await conv.send_message(f"/unfban {user_link} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
                             elif reason != "Not specified":
-                                await conv.send_message(f"!unfban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
+                                await conv.send_message(f"/unfban {user_link} {reason} // #[{msggprf.id}](https://t.me/{GBANLOG_CHATID_USER}/{msggprf.id})", link_preview=False)
                         else:
                             if reason == "Not specified":
-                                await conv.send_message(f"!unfban {user_link}")
+                                await conv.send_message(f"/unfban {user_link}")
                             if reason != "Not specified":
-                                await conv.send_message(f"!unfban {user_link} {reason}")
+                                await conv.send_message(f"/unfban {user_link} {reason}")
 
                         reply = await conv.get_response()
                         if not any(i in reply.text for i in fban_replies):
