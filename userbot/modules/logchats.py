@@ -4,7 +4,7 @@
 
 import asyncio, re
 
-from userbot import bot, PMLOG, PMLOG_CHATID, CMD_HELP, LOGS, ISAFK, BOTLOG, BOTLOG_CHATID, trgg, tgbott
+from userbot import bot, PMLOG, PMLOG_CHATID, CMD_HELP, LOGS, ISAFK, BOTLOG, BOTLOG_CHATID, trgg, tgbott, bot
 
 from userbot.modules.sql_helper import pm_permit_sql
 from userbot.modules.sql_helper.no_log_pms_sql import gvarstatus, addgvar
@@ -97,10 +97,12 @@ async def log_tagged_messages(event):
         resalt += f"\n<b>Message type : </b><code>{messaget}</code>"
     else:
         try:
-            if event.message.message.find("@") == "-1":
+            meee = await bot.get_me()
+            mytag = f"@{meee.username}"
+            if event.message.message.find(mytag) == "-1":
                 msgggg = event.message.message
             else:
-                msgggg = event.message.message.replace("@", "@ ")
+                msgggg = event.message.message.replace(f"@{meee.username}",f"@ {meee.username}")
         except Exception as e:
             LOGS.warn(str(e))
         resalt += f"\n<b>Message : </b>\n{msgggg}"
