@@ -23,7 +23,7 @@ async def echoo(event):
 @regassist(pattern="/start$")
 async def startt(event):
     me = await bot.get_me()
-    if event.sender.id != me.id:
+    if event.sender.id == me.id:
         await event.reply("Hewwo")
     else:
         if event.is_group and event.is_channel:
