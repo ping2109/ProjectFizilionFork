@@ -131,14 +131,14 @@ async def keep_read(message):
 
 
 # Regex-Ninja module by @Kandnub
-regexNinja = False
+regexNinja = True
 
 
-@register(outgoing=True, pattern="^s/".format(trg=trgg))
+@register(outgoing=True, pattern="^s/")
 async def sedNinja(event):
     """For regex-ninja module, auto delete command starting with s/"""
     if regexNinja:
-        await sleep(0.5)
+        # await sleep(0.5)
         await event.delete()
 
 
