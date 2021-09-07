@@ -141,7 +141,7 @@ ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT") or "False")
 ALIVE_NAME = os.environ.get("ALIVE_NAME") or None
 
 # Default .alive logo
-ALIVE_LOGO = str(os.environ.get("ALIVE_LOGO") or "https://github.com/ping2109/ProjectFizilionFork/raw/pruh/resources/fizsmall.png")
+ALIVE_LOGO = str(os.environ.get("ALIVE_LOGO") or "https://pbs.twimg.com/media/EieurGJXgAASyJG.jpg:large")
 
 # .alive and .help timeout
 TIMEOUT = sb(os.environ.get("TIMEOUT") or "True")
