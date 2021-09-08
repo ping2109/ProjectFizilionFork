@@ -8,7 +8,7 @@ WORKDIR /Fizilion
 RUN apk add megatools
 
 # clone repo
-RUN git clone https://github.com/ping2109/ProjectFizilionFork -b pruh /Fizilion
+RUN git clone https://github.com/ping2109/ProjectFizilionFork -b FlameOS /Fizilion
 #RUN git clone https://github.com/AbOuLfOoOoOuF/ProjectFizilionFork -b pruh /Fizilion
 #RUN git clone https://github.com/PrajjuS/ProjectFizilion -b demon /Fizilion
 #RUN git clone https://github.com/Senpai-sama-afk/ProjectFizilion -b dragon /Fizilion
